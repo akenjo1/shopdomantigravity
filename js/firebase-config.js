@@ -2,12 +2,12 @@
 // Thay thế các giá trị bên dưới bằng config từ Firebase Console của bạn
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey : "AIzaSyD2HdTQJfpGMoxRFMZCmNFl8qV1DtwZQMQ" , 
+  authDomain : "shopdom-9c971.firebaseapp.com" , 
+  projectId : "shopdom-9c971" , 
+  storageBucket : "shopdom-9c971.firebasestorage.app" , 
+  messagingSenderId : "517017065100" , 
+  appId : "1:517017065100:web:7366d3ca8879c0749bcda9"
 };
 
 // Khởi tạo Firebase
@@ -53,3 +53,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error initializing Firebase:', error);
     }
 });
+
