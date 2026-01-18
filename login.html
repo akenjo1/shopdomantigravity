@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Account Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 50%, #242424 100%);
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-logo p {
+            color: var(--text-secondary);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <h1 class="logo">💎 Account Shop</h1>
+                <p>Hệ thống bán tài khoản Premium</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Đăng nhập</button>
+                <button class="auth-tab" onclick="switchTab('register')">Đăng ký</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-input" id="loginUsername" required placeholder="Nhập tên đăng nhập">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-input" id="loginPassword" required placeholder="Nhập mật khẩu">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Đăng nhập</button>
+
+                <div
+                    style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; font-size: 0.875rem;">
+                    <strong>Demo Account:</strong><br>
+                    Admin: <code>admin</code> / <code>admin123</code><br>
+                    (Tạo tài khoản mới để dùng như khách hàng)
+                </div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-input" id="registerUsername" required
+                        placeholder="Chọn tên đăng nhập">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="registerEmail" required placeholder="Nhập email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-input" id="registerPassword" required placeholder="Tạo mật khẩu">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Xác nhận mật khẩu</label>
+                    <input type="password" class="form-input" id="registerPasswordConfirm" required
+                        placeholder="Nhập lại mật khẩu">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Đăng ký</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/database-firebase.js"></script>
+    <script src="js/affiliate.js"></script>
+    <script>
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const result = await authenticateUser(username, password);
+
+            if (result.success) {
+                if (result.user.role === 'admin') {
+                    window.location.href = 'admin/index.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert(result.message);
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('Mật khẩu xác nhận không khớp!');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Mật khẩu phải có ít nhất 6 ký tự!');
+                return;
+            }
+
+            const result = await registerUser(username, password, email);
+
+            if (result.success) {
+                alert('Đăng ký thành công! Đang chuyển đến trang chủ...');
+                window.location.href = 'index.html';
+            } else {
+                alert(result.message);
+            }
+        }
+
+        // Check if already logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                if (currentUser.role === 'admin') {
+                    window.location.href = 'admin/index.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

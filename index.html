@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Shop - Trang chủ</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Notification Popup -->
+    <div id="notificationPopup" class="notification-popup">
+        <div class="notification-content">
+            <div id="notificationMessage" class="notification-message"></div>
+            <div class="notification-actions">
+                <button class="btn btn-secondary" onclick="closeNotification()">Đóng</button>
+                <button class="btn btn-primary" onclick="hideNotification24h()">Tắt 24h</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <span>☰</span>
+                    </button>
+                    <h1 class="logo">💎 Account Shop</h1>
+                </div>
+                <div id="walletDisplay" class="wallet-display"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title" id="sidebarUserName">Menu</h2>
+        </div>
+        <nav>
+            <ul class="sidebar-nav">
+                <li><a href="index.html" class="active">🏠 Trang chủ</a></li>
+                <li><a href="#" onclick="showDepositModal()">💰 Nạp tiền</a></li>
+                <li><a href="#" onclick="showPurchaseHistory()">📦 Lịch sử mua hàng</a></li>
+                <li><a href="#" onclick="showTransactionHistory()">💳 Lịch sử giao dịch</a></li>
+                <li><a href="#" onclick="showAffiliatePanel()">🎁 Affiliate</a></li>
+                <li><a href="#" onclick="logout()">🚪 Đăng xuất</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h2 class="page-title">Tài khoản Premium</h2>
+
+            <div id="productGrid" class="product-grid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Xác nhận mua hàng</h3>
+                <button class="modal-close" onclick="closePurchaseModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="purchaseDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePurchaseModal()">Hủy</button>
+                <button class="btn btn-primary" onclick="confirmPurchase()">Xác nhận mua</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Thông tin tài khoản</h3>
+                <button class="modal-close" onclick="closeOrderDetails()">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="orderDetailsContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-full" onclick="closeOrderDetails()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Nạp tiền vào tài khoản</h3>
+                <button class="modal-close" onclick="closeDepositModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Số tiền muốn nạp (VND)</label>
+                    <input type="number" id="depositAmount" class="form-input" placeholder="Nhập số tiền" min="10000"
+                        step="10000">
+                </div>
+                <div id="depositQRCode" class="hidden">
+                    <div class="qr-container">
+                        <img id="qrCodeImage" class="qr-code" src="" alt="QR Code">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mã nội dung chuyển khoản</label>
+                        <div class="transaction-code" id="transactionCode"></div>
+                        <button class="copy-btn btn-full" onclick="copyTransactionCode()">📋 Sao chép mã</button>
+                    </div>
+                    <div class="alert alert-info">
+                        💡 Vui lòng chuyển khoản chính xác theo mã nội dung để được duyệt tự động
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDepositModal()">Đóng</button>
+                <button class="btn btn-primary" onclick="generateDepositQR()">Tạo mã QR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts: For Firebase, use firebase-config.js and database-firebase.js -->
+    <!-- For local testing without Firebase, use database.js -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/database-firebase.js"></script>
+    <script src="js/pricing.js"></script>
+    <script src="js/affiliate.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

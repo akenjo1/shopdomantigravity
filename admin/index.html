@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Account Shop</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .admin-main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .product-form {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                transform: translateX(-100%);
+                z-index: 200;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div style="padding: 0 1.5rem 2rem; border-bottom: 1px solid var(--border-color);">
+                <h1 class="logo" style="font-size: 1.5rem;">⚙️ Admin Panel</h1>
+            </div>
+            <nav style="margin-top: 1rem;">
+                <ul class="sidebar-nav">
+                    <li><a href="#" class="active" onclick="switchAdminTab('products', event)">📦 Quản lý sản phẩm</a>
+                    </li>
+                    <li><a href="#" onclick="switchAdminTab('users', event)">👥 Quản lý người dùng</a></li>
+                    <li><a href="#" onclick="switchAdminTab('orders', event)">🛒 Đơn hàng</a></li>
+                    <li><a href="#" onclick="switchAdminTab('notifications', event)">🔔 Thông báo</a></li>
+                    <li><a href="#" onclick="switchAdminTab('settings', event)">⚙️ Cài đặt</a></li>
+                    <li><a href="../index.html">🏠 Trang chủ</a></li>
+                    <li><a href="#" onclick="adminLogout()">🚪 Đăng xuất</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Products Tab -->
+            <div id="productsTab" class="tab-content active">
+                <div class="admin-header">
+                    <h2 class="page-title" style="margin: 0;">Quản lý sản phẩm</h2>
+                    <button class="btn btn-primary" onclick="showAddProductForm()">+ Thêm sản phẩm</button>
+                </div>
+
+                <div id="addProductForm" class="product-form hidden">
+                    <h3 style="margin-bottom: 1.5rem;">Thêm sản phẩm mới</h3>
+                    <form onsubmit="handleAddProduct(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Loại dịch vụ</label>
+                                <select class="form-select" id="productServiceType" required>
+                                    <option value="CapCut Pro">CapCut Pro</option>
+                                    <option value="Youtube Premium">Youtube Premium</option>
+                                    <option value="Netflix Premium">Netflix Premium</option>
+                                    <option value="Spotify Premium">Spotify Premium</option>
+                                    <option value="Canva Pro">Canva Pro</option>
+                                    <option value="Adobe Creative">Adobe Creative</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Giá gốc (VND)</label>
+                                <input type="number" class="form-input" id="productOriginalPrice" required min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Ngày bắt đầu</label>
+                                <input type="date" class="form-input" id="productStartDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Ngày kết thúc</label>
+                                <input type="date" class="form-input" id="productEndDate" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" id="productUsername" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="text" class="form-input" id="productPassword" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Cookie</label>
+                            <textarea class="form-textarea" id="productCookie"
+                                placeholder="Session cookie..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">LocalStorage JSON</label>
+                            <textarea class="form-textarea" id="productLocalStorage"
+                                placeholder='{"key": "value"}'></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" class="btn btn-secondary" onclick="hideAddProductForm()">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="productsList"></div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="usersTab" class="tab-content">
+                <div class="admin-header">
+                    <h2 class="page-title" style="margin: 0;">Quản lý người dùng</h2>
+                    <button class="btn btn-secondary" onclick="cleanOldData()">🗑️ Dọn dẹp dữ liệu cũ</button>
+                </div>
+                <div id="usersList"></div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="ordersTab" class="tab-content">
+                <div class="admin-header">
+                    <h2 class="page-title" style="margin: 0;">Đơn hàng</h2>
+                </div>
+                <div id="ordersList"></div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="notificationsTab" class="tab-content">
+                <div class="admin-header">
+                    <h2 class="page-title" style="margin: 0;">Quản lý thông báo</h2>
+                    <button class="btn btn-primary" onclick="showAddNotification()">+ Thêm thông báo</button>
+                </div>
+
+                <div id="addNotificationForm" class="product-form hidden">
+                    <h3 style="margin-bottom: 1.5rem;">Thêm thông báo mới</h3>
+                    <form onsubmit="handleAddNotification(event)">
+                        <div class="form-group">
+                            <label class="form-label">Nội dung thông báo</label>
+                            <textarea class="form-textarea" id="notificationMessage" required rows="5"
+                                placeholder="Nhập nội dung thông báo..."></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" class="btn btn-secondary" onclick="hideAddNotification()">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Tạo thông báo</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="notificationsList"></div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <div class="admin-header">
+                    <h2 class="page-title" style="margin: 0;">Cài đặt hệ thống</h2>
+                </div>
+
+                <div class="product-form">
+                    <h3 style="margin-bottom: 1.5rem;">Cấu hình nạp tiền</h3>
+                    <form onsubmit="handleUpdateSettings(event)">
+                        <div class="form-group">
+                            <label class="form-label">URL QR Code ngân hàng</label>
+                            <input type="url" class="form-input" id="settingsQRCodeUrl"
+                                placeholder="https://example.com/qr-code.png">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Hướng dẫn nạp tiền</label>
+                            <textarea class="form-textarea" id="settingsDepositInstruction" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Số tiền nạp tối thiểu (VND)</label>
+                                <input type="number" class="form-input" id="settingsMinDeposit" min="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Số tiền rút tối thiểu (VND)</label>
+                                <input type="number" class="form-input" id="settingsMinWithdrawal" min="0">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Lưu cài đặt</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Adjust Wallet Modal -->
+    <div id="adjustWalletModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Điều chỉnh ví</h3>
+                <button class="modal-close" onclick="closeAdjustWallet()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Loại ví</label>
+                    <select class="form-select" id="adjustWalletType">
+                        <option value="deposit">Ví nạp</option>
+                        <option value="commission">Ví hoa hồng</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Số tiền (dương = cộng, âm = trừ)</label>
+                    <input type="number" class="form-input" id="adjustAmount" placeholder="Ví dụ: 100000 hoặc -50000">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Lý do</label>
+                    <input type="text" class="form-input" id="adjustReason" placeholder="Lý do điều chỉnh...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAdjustWallet()">Hủy</button>
+                <button class="btn btn-primary" onclick="confirmAdjustWallet()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="../js/pricing.js"></script>
+    <script src="../js/affiliate.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+
+</html>
