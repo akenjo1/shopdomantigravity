@@ -2,14 +2,13 @@
 // Thay thế các giá trị bên dưới bằng config từ Firebase Console của bạn
 
 const firebaseConfig = {
-    apiKey : "AIzaSyD2HdTQJfpGMoxRFMZCmNFl8qV1DtwZQMQ" , 
-  authDomain : "shopdom-9c971.firebaseapp.com" , 
-  projectId : "shopdom-9c971" , 
-  storageBucket : "shopdom-9c971.firebasestorage.app" , 
-  messagingSenderId : "517017065100" , 
-  appId : "1:517017065100:web:7366d3ca8879c0749bcda9"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || process.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || process.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || process.env.VITE_FIREBASE_APP_ID
 };
-
 // Khởi tạo Firebase
 let db = null;
 let auth = null;
@@ -53,4 +52,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error initializing Firebase:', error);
     }
 });
+
 
