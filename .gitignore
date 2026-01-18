@@ -1,5 +1,43 @@
-```
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Environment variables - IMPORTANT: Never commit these!
 .env
 .env.local
 .env.production
-```
+.env.development
+*.env
+
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+.vercel/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# User data (if using local testing)
+data/
+
+# Sensitive backups
+*.backup
+backup/
+
+# API Keys and secrets (extra protection)
+*secret*
+*private*
+credentials.json
